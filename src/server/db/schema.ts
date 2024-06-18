@@ -39,7 +39,7 @@ export const quotes = createTable("quote", {
   id: serial("id").primaryKey(),
   quote: varchar("quote", { length: 1024 }).notNull(),
   personQuoted: varchar("personQuoted", { length: 64 }).notNull(),
-  contextOfQuote: varchar("contextOfQuote", { length: 256 }).notNull(),
+  contextOfQuote: varchar("contextOfQuote", { length: 256 }),
   userId: varchar("userId", { length: 254 }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
