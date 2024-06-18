@@ -9,6 +9,7 @@ import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
 import { TopNav } from "~/app/_components/TopNav";
+import { ThemeProvider } from "~/components/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,9 +31,17 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`font-sans ${inter.variable}`}>
-          <TopNav />
-          <div className="w-full">first layout</div>
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div>
+              <TopNav />
+              {children}
+            </div>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

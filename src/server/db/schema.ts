@@ -24,6 +24,7 @@ export const images = createTable(
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
     url: varchar("url", { length: 1024 }).notNull(),
+    userId: varchar("userId", { length: 254 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -33,6 +34,18 @@ export const images = createTable(
     nameIndex: index("name_idx").on(example.name),
   }),
 );
+
+export const quotes = createTable("quote", {
+  id: serial("id").primaryKey(),
+  quote: varchar("quote", { length: 1024 }).notNull(),
+  personQuoted: varchar("personQuoted", { length: 64 }).notNull(),
+  contextOfQuote: varchar("contextOfQuote", { length: 256 }).notNull(),
+  userId: varchar("userId", { length: 254 }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true }),
+});
 
 // export const posts = createTable(
 //   "post",
