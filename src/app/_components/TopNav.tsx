@@ -3,16 +3,18 @@ import { ToggleDarkModeButton } from "~/app/_components/ToggleDarkModeButton";
 
 export function TopNav() {
   return (
-    <nav className="flex w-full items-center justify-between border-b p-4 text-xl font-semibold">
-      <div>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
+    <nav className="flex w-full items-center justify-end border-b p-4 text-xl font-semibold">
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <div className="flex justify-end">
           <ToggleDarkModeButton />
-          <UserButton />
-        </SignedIn>
-      </div>
+          <div className="ml-4 w-10">
+            <UserButton />
+          </div>
+        </div>
+      </SignedIn>
     </nav>
   );
 }

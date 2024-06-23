@@ -75,3 +75,13 @@
       @apply bg-background text-foreground;
     }
   }
+  
+  
+.cl-userButtonAvatarBox {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.page-side-margin-1 {
+  @apply ml-3 mr-3;
+}

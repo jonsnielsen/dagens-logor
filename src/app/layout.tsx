@@ -1,10 +1,4 @@
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
@@ -39,7 +33,9 @@ export default function RootLayout({
           >
             <div>
               <TopNav />
-              {children}
+
+              <SignedOut>Hello</SignedOut>
+              <SignedIn>{children}</SignedIn>
             </div>
           </ThemeProvider>
         </body>

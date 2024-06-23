@@ -47,6 +47,20 @@ export const quotes = createTable("quote", {
   updatedAt: timestamp("updatedAt", { withTimezone: true }),
 });
 
+export type QuoteDBType = typeof quotes.$inferSelect;
+
+export const gulligheter = createTable("gulligheter", {
+  id: serial("id").primaryKey(),
+  gullighet: varchar("gullighet", { length: 1024 }).notNull(),
+  gulligPerson: varchar("gulligPerson", { length: 64 }).notNull(),
+  userId: varchar("userId", { length: 254 }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true }),
+});
+
+export type gullighetDBType = typeof quotes.$inferSelect;
 // export const posts = createTable(
 //   "post",
 //   {

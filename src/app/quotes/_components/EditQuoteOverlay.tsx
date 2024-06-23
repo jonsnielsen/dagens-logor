@@ -1,15 +1,13 @@
 "use client";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
 
-import { PlusIcon } from "@radix-ui/react-icons";
+import { Pencil1Icon } from "@radix-ui/react-icons";
 import { Button } from "~/components/ui/button";
 
 import {
@@ -26,9 +24,10 @@ import { Input } from "~/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createQuote } from "~/server/actions";
+import { updateQuote } from "~/server/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { QuoteDBType } from "~/server/db/schema";
 
 function SubmitButton() {
   // const { pending } = useFormStatus();
@@ -39,10 +38,10 @@ function SubmitButton() {
 const formSchema = z.object({
   quote: z.string().min(1, "Required").max(1024),
   personQuoted: z.string().max(64),
-  contextOfQuote: z.string().max(254),
+  contextOfQuote: z.string().max(254).optional(),
 });
 
-export function CreateQuoteOverlay() {
+export function EditQuoteOverlay({ quote }: { quote: QuoteDBType }) {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -50,14 +49,14 @@ export function CreateQuoteOverlay() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      quote: "",
-      personQuoted: "",
-      contextOfQuote: "",
+      quote: quote.quote,
+      contextOfQuote: quote.contextOfQuote ?? undefined,
+      personQuoted: quote.personQuoted,
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await createQuote(values);
+    const res = await updateQuote(values, quote.id);
     if (!res?.message) {
       // reruns on the server and refreshes just the necessary parts.
       router.refresh();
@@ -69,12 +68,12 @@ export function CreateQuoteOverlay() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="icon">
-          <PlusIcon />
+          <Pencil1Icon />
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create quote</DialogTitle>
+          <DialogTitle>Edit quote</DialogTitle>
           {/* <DialogDescription>
             This action cannot be undone. This will permanently delete your
             account and remove your data from our servers.
