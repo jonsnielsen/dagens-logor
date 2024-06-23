@@ -1,9 +1,12 @@
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { ToggleDarkModeButton } from "~/app/_components/ToggleDarkModeButton";
+import { Logo } from "~/assets/Logo";
 
 export function TopNav() {
   return (
-    <nav className="flex w-full items-center justify-end border-b p-4 text-xl font-semibold">
+    <nav className="flex w-full items-center justify-between border-b p-4 text-xl font-semibold">
+      <Logo className="" width="165px" height="40px" />
+      {/* <Logo className="" style={{ scale: 0.8 }} /> */}
       <SignedOut>
         <SignInButton />
       </SignedOut>

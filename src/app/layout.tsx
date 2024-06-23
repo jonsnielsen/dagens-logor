@@ -14,6 +14,7 @@ export const metadata = {
   title: "Dagens Lågor",
   description: "App for the ceramics department of Sorangens folkhogskola",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
