@@ -19,23 +19,17 @@ function Quote({ quote, personQuoted }: QuoteProps) {
     </Card>
   );
 }
-export default async function QuoteIndividualPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  // const { id } = params;
+export default async function QuoteIndividualPage() {
   const quotes = await getQuotes();
 
   return (
     <main className="page-side-margin-1">
-      <h1 className="mb-6 mt-6 text-center text-2xl">Quotes</h1>
       {quotes.map((quote) => (
         <Link href={`/quotes/${quote.id}`} key={quote.id}>
           <Quote {...quote} />
         </Link>
       ))}
-      <div className="fixed bottom-8 right-8">
+      <div className="fixed bottom-28 right-8">
         <CreateQuoteOverlay />
       </div>
     </main>

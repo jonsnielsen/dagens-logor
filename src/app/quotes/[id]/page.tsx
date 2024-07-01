@@ -30,7 +30,7 @@ export default async function QuoteIndividualPage({
   return (
     <main className="page-side-margin-1 mt-16">
       {hasCRUDRights && (
-        <div className="fixed bottom-8 right-8">
+        <div className="fixed bottom-28 right-8">
           <div className="flex gap-2">
             <EditQuoteOverlay quote={quote} />
             <DeleteQuoteOverlay quoteId={quote.id} />

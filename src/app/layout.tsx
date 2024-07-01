@@ -4,6 +4,7 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 import { TopNav } from "~/app/_components/TopNav";
 import { ThemeProvider } from "~/components/ThemeProvider";
+import { BottomNav } from "~/app/_components/BottomNav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className="bg-white">
         <body className={`font-sans ${inter.variable} h-lvh`}>
           <ThemeProvider
             attribute="class"
@@ -36,7 +37,12 @@ export default function RootLayout({
               <TopNav />
 
               <SignedOut>Hello</SignedOut>
-              <SignedIn>{children}</SignedIn>
+              <SignedIn>
+                <div className="page-bottom-nav-offset page-top-nav-offset">
+                  {children}
+                </div>
+              </SignedIn>
+              <BottomNav />
             </div>
           </ThemeProvider>
         </body>

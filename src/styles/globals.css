@@ -36,7 +36,7 @@
       --radius: 0.5rem;
     }
 
-    .dark {
+    /* .dark {
       --background: 222.2 84% 4.9%;
       --foreground: 210 40% 98%;
 
@@ -64,7 +64,7 @@
       --border: 217.2 32.6% 17.5%;
       --input: 217.2 32.6% 17.5%;
       --ring: 212.7 26.8% 83.9%;
-    }
+    } */
   }
 
   @layer base {
@@ -84,4 +84,12 @@
 
 .page-side-margin-1 {
   @apply ml-3 mr-3;
+}
+
+.page-bottom-nav-offset {
+  @apply pb-10;
+}
+
+.page-top-nav-offset {
+  @apply pt-20;
 }

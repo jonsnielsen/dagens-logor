@@ -61,6 +61,22 @@ export const gulligheter = createTable("gulligheter", {
 });
 
 export type gullighetDBType = typeof quotes.$inferSelect;
+
+// export const calendar = createTable("calendar", {
+//   id: serial("id").primaryKey(),
+//   title: varchar("title", { length: 254 }).notNull(),
+//   description: varchar("title", { length: 1024 }),
+//   date: varchar("date", { length: 64 }).notNull(),
+//   contextOfQuote: varchar("contextOfQuote", { length: 256 }),
+//   userId: varchar("userId", { length: 254 }).notNull(),
+//   createdAt: timestamp("created_at", { withTimezone: true })
+//     .default(sql`CURRENT_TIMESTAMP`)
+//     .notNull(),
+//   updatedAt: timestamp("updatedAt", { withTimezone: true }),
+// });
+
+// export type CalendarDBType = typeof calendar.$inferSelect;
+
 // export const posts = createTable(
 //   "post",
 //   {
