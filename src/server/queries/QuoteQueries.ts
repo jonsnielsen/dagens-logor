@@ -1,12 +1,35 @@
 "use server";
-
 import { auth } from "@clerk/nextjs/server";
-import { eq, and } from "drizzle-orm";
 import { db } from "~/server/db";
-import type { QuoteDTO } from "~/server/db/dtoTypes";
+import { eq, and } from "drizzle-orm";
+import type { CreateQuoteDTO } from "~/server/db/dtoTypes";
 import { quotes } from "~/server/db/schema";
 
-export async function createQuote(quote: QuoteDTO) {
+export async function getQuotes() {
+  const user = auth();
+  if (!user.userId) throw new Error("Unauthorized, not logged in");
+
+  const quotes = await db.query.quotes.findMany({
+    orderBy: (model, { desc }) => desc(model.id),
+  });
+
+  return quotes;
+}
+
+export async function getQuote(quoteId: number) {
+  const user = auth();
+  if (!user.userId) throw new Error("Unauthorized, not logged in");
+
+  const quote = await db.query.quotes.findFirst({
+    where: (model, { eq }) => eq(model.id, quoteId),
+  });
+
+  if (!quote) throw new Error("Quote not found");
+
+  return quote;
+}
+
+export async function createQuote(quote: CreateQuoteDTO) {
   const user = auth();
   if (!user.userId) throw new Error("Unauthorized, not logged in");
 
@@ -25,7 +48,7 @@ export async function createQuote(quote: QuoteDTO) {
   }
 }
 
-export async function updateQuote(quote: QuoteDTO, quoteId: number) {
+export async function updateQuote(quote: CreateQuoteDTO, quoteId: number) {
   const user = auth();
   if (!user.userId) throw new Error("Unauthorized, not logged in");
 

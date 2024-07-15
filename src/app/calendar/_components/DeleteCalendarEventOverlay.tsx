@@ -2,10 +2,11 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "~/components/ui/dialog";
 
 import { TrashIcon } from "@radix-ui/react-icons";
@@ -13,18 +14,21 @@ import { Button } from "~/components/ui/button";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { DialogDescription } from "@radix-ui/react-dialog";
-import { deleteQuote } from "~/server/queries/QuoteQueries";
+import { deleteCalendarEvent } from "~/server/queries/CalendarQueries";
 
-export function DeleteQuoteOverlay({ quoteId }: { quoteId: number }) {
+export function DeleteCalendarEventOverlay({
+  calendarEventId,
+}: {
+  calendarEventId: number;
+}) {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
 
   async function onDelete() {
-    const res = await deleteQuote(quoteId);
+    const res = await deleteCalendarEvent(calendarEventId);
     if (!res?.message) {
-      router.push("/quotes");
+      router.push("/calendar");
     }
   }
 
@@ -37,12 +41,8 @@ export function DeleteQuoteOverlay({ quoteId }: { quoteId: number }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Sure you want to delete quote?</DialogTitle>
+          <DialogTitle>Sure you want to delete event?</DialogTitle>
           <DialogDescription>This action can not be undone</DialogDescription>
-          {/* <DialogDescription>
-          This action cannot be undone. This will permanently delete your
-          account and remove your data from our servers.
-        </DialogDescription> */}
         </DialogHeader>
         <DialogFooter>
           <div className="mt-4 flex flex-col gap-3">

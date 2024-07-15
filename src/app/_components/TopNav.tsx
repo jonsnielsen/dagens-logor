@@ -12,11 +12,13 @@ export function TopNav() {
   const pathname = usePathname();
   const firstPathnameEntry = usePathnameEntry(1);
   const secondPathnameEntry = usePathnameEntry(2);
+  const isRootQuotes = firstPathnameEntry === "quotes";
+  const isRootCalendar = firstPathnameEntry === "calendar";
 
-  const hasBackButton = firstPathnameEntry === "quotes" && secondPathnameEntry;
+  const hasBackButton = (isRootQuotes || isRootCalendar) && secondPathnameEntry;
   const backButton = hasBackButton && (
     <Button asChild variant="ghost" size="icon">
-      <Link href="/quotes">
+      <Link href={isRootQuotes ? "/quotes" : "/calendar"}>
         <BsArrowLeft fontSize={22} />{" "}
       </Link>
     </Button>
@@ -31,7 +33,9 @@ export function TopNav() {
 
   return (
     <nav className="fixed top-0 flex w-full items-center justify-between border-b bg-slate-50 p-4 text-xl font-semibold">
-      {/* <Logo width="165px" height="40px" /> */}
+      <SignedOut>
+        <Logo width="165px" height="40px" />
+      </SignedOut>
       <div className="flex grow basis-0 justify-start">{backButton}</div>
       <SignedOut>
         <SignInButton />

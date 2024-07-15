@@ -3,11 +3,14 @@ import { DeleteQuoteOverlay } from "~/app/quotes/_components/DeleteQuoteOverlay"
 import { EditQuoteOverlay } from "~/app/quotes/_components/EditQuoteOverlay";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
-import { getQuote, getUser } from "~/server/queries";
+import { getQuote } from "~/server/queries/QuoteQueries";
 import { useUser } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
+import { getUser } from "~/server/queries/UserQueries";
+import { isLoggedIn } from "~/lib/serverUtils";
 
 const sectionClasses = "my-8";
+const sectionTopClasses = "mb-8";
 const headingClasses = "text-sm font-bold mb-2";
 const paragraphClasses = "text-xl";
 
@@ -16,6 +19,8 @@ export default async function QuoteIndividualPage({
 }: {
   params: { id: string };
 }) {
+  if (!isLoggedIn()) return null;
+
   const { id } = params;
 
   const quote = await getQuote(Number(id));
@@ -28,7 +33,7 @@ export default async function QuoteIndividualPage({
   const hasCRUDRights = loggedInUser?.id && quote.userId === loggedInUser?.id;
 
   return (
-    <main className="page-side-margin-1 mt-16">
+    <main className="page-side-margin-1">
       {hasCRUDRights && (
         <div className="fixed bottom-28 right-8">
           <div className="flex gap-2">
@@ -37,7 +42,7 @@ export default async function QuoteIndividualPage({
           </div>
         </div>
       )}
-      <div className={sectionClasses}>
+      <div className={sectionTopClasses}>
         <h3 className={headingClasses}>Quote</h3>
         <p className={paragraphClasses}>{quote.quote}</p>
       </div>

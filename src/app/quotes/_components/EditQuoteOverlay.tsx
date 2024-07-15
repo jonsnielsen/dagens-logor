@@ -24,10 +24,10 @@ import { Input } from "~/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { updateQuote } from "~/server/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { QuoteDBType } from "~/server/db/schema";
+import { updateQuote } from "~/server/queries/QuoteQueries";
 
 function SubmitButton() {
   // const { pending } = useFormStatus();

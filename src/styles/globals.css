@@ -91,5 +91,5 @@
 }
 
 .page-top-nav-offset {
-  @apply pt-20;
+  @apply pt-[100px];
 }

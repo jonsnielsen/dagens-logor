@@ -3,12 +3,12 @@
 import { SignedIn } from "@clerk/nextjs";
 import { BsChatLeftQuote, BsChatLeftQuoteFill } from "react-icons/bs";
 import { BsCalendar2Range, BsCalendar2RangeFill } from "react-icons/bs";
-import { PiFireLight, PiFireFill } from "react-icons/pi";
+import { PiFireLight, PiFireFill, PiCalendarDotsLight } from "react-icons/pi";
 import Link from "next/link";
 import { usePathnameEntry } from "~/lib/hooks";
 
 const navItems = [
-  { Icon: PiFireLight, IconFill: PiFireFill, fontSize: 22, url: "/kiln" },
+  // { Icon: PiFireLight, IconFill: PiFireFill, fontSize: 22, url: "/kiln" },
   {
     Icon: BsCalendar2Range,
     IconFill: BsCalendar2RangeFill,

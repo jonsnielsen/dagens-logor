@@ -11,6 +11,5 @@ export function usePathnameEntry(entryNumber: number) {
   // first entry will be empty string, for our purposes the second entry is the first
   const entry =
     pathnameArray.length >= entryNumber + 1 && pathnameArray[entryNumber];
-  console.log({ entry });
   return entry;
 }

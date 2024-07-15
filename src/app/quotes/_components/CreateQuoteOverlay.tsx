@@ -26,9 +26,9 @@ import { Input } from "~/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createQuote } from "~/server/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { createQuote } from "~/server/queries/QuoteQueries";
 
 function SubmitButton() {
   // const { pending } = useFormStatus();

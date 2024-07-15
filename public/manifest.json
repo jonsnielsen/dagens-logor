@@ -3,10 +3,10 @@
   "background_color": "#F8FAFC",
   "display": "standalone",
   "scope": "/",
-  "start_url": "/",
-  "name": "My Next App",
-  "short_name": "NEXT",
-  "description": "My Next JS app with support for PWA",
+  "start_url": "/calendar",
+  "name": "Dagens Lågor",
+  "short_name": "Dagens Lågor",
+  "description": "Dagens Lågor",
   "icons": [
     {
       "src": "./icons/58.png",

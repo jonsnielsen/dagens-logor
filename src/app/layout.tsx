@@ -25,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className="bg-white">
+      <html lang="en" className="bg-white" suppressHydrationWarning>
         <body className={`font-sans ${inter.variable} h-lvh`}>
           <ThemeProvider
             attribute="class"
@@ -36,12 +36,17 @@ export default function RootLayout({
             <div>
               <TopNav />
 
-              <SignedOut>Hello</SignedOut>
-              <SignedIn>
-                <div className="page-bottom-nav-offset page-top-nav-offset">
-                  {children}
-                </div>
-              </SignedIn>
+              <div className="page-bottom-nav-offset page-top-nav-offset">
+                <SignedOut>
+                  <h1 className="absolute top-1/3 w-full px-4  text-center text-2xl">
+                    {"Welcome to Dagens Lågor"}
+                    <div>
+                      {`Please press "Sign in" in order to use the app or create an account.`}
+                    </div>
+                  </h1>
+                </SignedOut>
+                <SignedIn>{children}</SignedIn>
+              </div>
               <BottomNav />
             </div>
           </ThemeProvider>

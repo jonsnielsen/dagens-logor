@@ -8,6 +8,7 @@ import {
   serial,
   timestamp,
   varchar,
+  date,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -62,32 +63,18 @@ export const gulligheter = createTable("gulligheter", {
 
 export type gullighetDBType = typeof quotes.$inferSelect;
 
-// export const calendar = createTable("calendar", {
-//   id: serial("id").primaryKey(),
-//   title: varchar("title", { length: 254 }).notNull(),
-//   description: varchar("title", { length: 1024 }),
-//   date: varchar("date", { length: 64 }).notNull(),
-//   contextOfQuote: varchar("contextOfQuote", { length: 256 }),
-//   userId: varchar("userId", { length: 254 }).notNull(),
-//   createdAt: timestamp("created_at", { withTimezone: true })
-//     .default(sql`CURRENT_TIMESTAMP`)
-//     .notNull(),
-//   updatedAt: timestamp("updatedAt", { withTimezone: true }),
-// });
+export const calendarEvents = createTable("calendar", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 254 }).notNull(),
+  description: varchar("description", { length: 1024 }),
+  category: varchar("category", { length: 64 }).notNull(),
+  visibility: varchar("visibility", { length: 64 }).notNull(),
+  date: timestamp("date", { mode: "string" }).notNull(),
+  userId: varchar("userId", { length: 254 }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true }),
+});
 
-// export type CalendarDBType = typeof calendar.$inferSelect;
-
-// export const posts = createTable(
-//   "post",
-//   {
-//     id: serial("id").primaryKey(),
-//     name: varchar("name", { length: 256 }),
-//     createdAt: timestamp("created_at", { withTimezone: true })
-//       .default(sql`CURRENT_TIMESTAMP`)
-//       .notNull(),
-//     updatedAt: timestamp("updatedAt", { withTimezone: true }),
-//   },
-//   (example) => ({
-//     nameIndex: index("name_idx").on(example.name),
-//   })
-// );
+export type CalendarDBType = typeof calendarEvents.$inferSelect;
