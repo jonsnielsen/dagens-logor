@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { TopNav } from "~/app/_components/TopNav";
 import { ThemeProvider } from "~/components/ThemeProvider";
 import { BottomNav } from "~/app/_components/BottomNav";
+import { Viewport } from "next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,6 +17,11 @@ export const metadata = {
   description: "App for the ceramics department of Sorangens folkhogskola",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
   manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  userScalable: false,
 };
 
 export default function RootLayout({
