@@ -29,6 +29,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createQuote } from "~/server/queries/QuoteQueries";
+import { toast } from "sonner";
 
 function SubmitButton() {
   // const { pending } = useFormStatus();
@@ -62,6 +63,8 @@ export function CreateQuoteOverlay() {
       // reruns on the server and refreshes just the necessary parts.
       router.refresh();
       setOpen(false);
+    } else {
+      toast.error(res.message);
     }
   }
 

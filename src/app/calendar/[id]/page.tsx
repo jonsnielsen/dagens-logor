@@ -1,10 +1,8 @@
 import Image from "next/image";
-import { DeleteQuoteOverlay } from "~/app/quotes/_components/DeleteQuoteOverlay";
-import { EditQuoteOverlay } from "~/app/quotes/_components/EditQuoteOverlay";
 import { Separator } from "~/components/ui/separator";
 import { currentUser } from "@clerk/nextjs/server";
 import { getUser } from "~/server/queries/UserQueries";
-import { isLoggedIn } from "~/lib/serverUtils";
+import { hasAdminRights, isLoggedIn } from "~/lib/serverUtils";
 import { getCalendarEvent } from "~/server/queries/CalendarQueries";
 import { format } from "date-fns";
 import {
@@ -40,8 +38,10 @@ export default async function QuoteIndividualPage({
 
   const loggedInUser = await currentUser();
 
+  const isAdmin = await hasAdminRights();
+
   const hasCRUDRights =
-    loggedInUser?.id && calendarEvent.userId === loggedInUser?.id;
+    loggedInUser?.id && (calendarEvent.userId === loggedInUser?.id || isAdmin);
 
   const formattedDate = format(calendarEvent.date, "EEEE MMMM d, yyyy");
   const time = getTimeFromDate(new Date(calendarEvent.date));
@@ -52,7 +52,7 @@ export default async function QuoteIndividualPage({
         <div className="fixed bottom-28 right-8">
           <div className="flex gap-2">
             <EditCalendarEventOverlay calendarEvent={calendarEvent} />
-            <DeleteCalendarEventOverlay calendarEventId={calendarEvent.id} />
+            <DeleteCalendarEventOverlay calendarEvent={calendarEvent} />
           </div>
         </div>
       )}
@@ -70,6 +70,7 @@ export default async function QuoteIndividualPage({
           <span>{calendarEvent.category}</span>
         </div>
         <div className="flex items-center gap-2">
+          {/* eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison */}
           {calendarEvent.visibility === Visibility.PRIVATE ? (
             <PiEyeSlashLight className="h-5 w-5" />
           ) : (

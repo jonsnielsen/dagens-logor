@@ -3,9 +3,10 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { eq, and } from "drizzle-orm";
 import { CreateCalendarEventDTO } from "~/server/db/dtoTypes";
-import { calendarEvents } from "~/server/db/schema";
+import { CalendarDBType, calendarEvents } from "~/server/db/schema";
 import { union } from "drizzle-orm/pg-core";
-import { Visibility } from "~/lib/types";
+import { ServerErrorType, Visibility } from "~/lib/types";
+import { hasAdminRights } from "~/lib/serverUtils";
 
 export async function getCalendarEvent(calendarEventId: number) {
   const user = auth();
@@ -67,6 +68,7 @@ export async function getCalendarEvents() {
 }
 
 type ArrayElement<A> = A extends readonly (infer T)[] ? T : never;
+
 // The type of the object returned. Not the array
 export type GetCalendarEventsReturnType = ArrayElement<
   Awaited<ReturnType<typeof getCalendarEvents>>
@@ -75,81 +77,86 @@ export type GetCalendarEventsReturnType = ArrayElement<
 export async function createCalendarEvent(
   calendarEvent: CreateCalendarEventDTO,
 ) {
-  const user = auth();
-  if (!user.userId) throw new Error("Unauthorized, not logged in");
+  const error: ServerErrorType = { message: null };
 
-  if (!calendarEvent.title) throw new Error("Title field cannot be empty");
+  const user = auth();
+  if (!user.userId) error.message = "Unauthorized, not logged in";
+
+  if (!calendarEvent.title) error.message = "Title field cannot be empty";
   // if (!calendarEvent.date) throw new Error("Date field cannot be empty");
-  if (!calendarEvent.category)
-    throw new Error("Category field cannot be empty");
+  if (!calendarEvent.category) error.message = "Category field cannot be empty";
   if (!calendarEvent.visibility)
-    throw new Error("Visibility field cannot be empty");
+    error.message = "Visibility field cannot be empty";
+
+  if (error.message) return error;
 
   try {
     await db.insert(calendarEvents).values({
       ...calendarEvent,
-      userId: user.userId,
+      userId: user.userId!,
     });
-  } catch (error) {
-    const message = `Couldn't create CalendarEvent`;
-    console.log(error);
-    console.log(message);
-    return {
-      message,
-    };
+  } catch (e) {
+    error.message = `${String(e)}`;
+    return error;
   }
 }
 
-export async function updateCalendarEvent(
-  calendarEvent: CreateCalendarEventDTO,
-  calendarEventId: number,
-) {
+export async function updateCalendarEvent(calendarEvent: CalendarDBType) {
+  const error: ServerErrorType = { message: null };
+
   const user = auth();
-  if (!user.userId) throw new Error("Unauthorized, not logged in");
+  const isAdmin = await hasAdminRights();
 
-  if (!user.userId) throw new Error("Unauthorized, not logged in");
+  if (!user.userId) error.message = "Unauthorized, not logged in";
 
-  if (!calendarEvent.title) throw new Error("Title field cannot be empty");
-  if (!calendarEvent.date) throw new Error("Date field cannot be empty");
-  if (!calendarEvent.category)
-    throw new Error("Category field cannot be empty");
+  // must be the owner or admin to edit
+  if (user.userId !== calendarEvent.userId && !isAdmin)
+    error.message = "Unauthorized, not the user that created the quote";
+
+  if (!calendarEvent.title) error.message = "Title field cannot be empty";
+  if (!calendarEvent.date) error.message = "Date field cannot be empty";
+  if (!calendarEvent.category) error.message = "Category field cannot be empty";
   if (!calendarEvent.visibility)
-    throw new Error("Visibility field cannot be empty");
+    error.message = "Visibility field cannot be empty";
+
+  if (error.message) return error;
 
   try {
     await db
       .update(calendarEvents)
       .set({ ...calendarEvent })
-      .where(eq(calendarEvents.id, calendarEventId));
-  } catch (error) {
-    const message = `Couldn't update Event. ${String(error)}`;
-    console.log(message);
-    return {
-      message,
-    };
+      .where(eq(calendarEvents.id, calendarEvent.id));
+  } catch (e) {
+    error.message = `${String(e)}`;
+    return error;
   }
 }
 
-export async function deleteCalendarEvent(calendarEventId: number) {
-  const user = auth();
-  const userId = user.userId;
-  if (!userId) throw new Error("Unauthorized, not logged in");
+export async function deleteCalendarEvent(calendarEvent: CalendarDBType) {
+  const error: ServerErrorType = { message: null };
 
-  // Must be the owner of the quote to delete
+  const user = auth();
+  const isAdmin = await hasAdminRights();
+
+  if (!user.userId) error.message = "Unauthorized, not logged in";
+
+  // must be the owner or admin to delete
+  if (user.userId !== calendarEvent.userId && !isAdmin)
+    error.message = "Unauthorized, not the user that created the quote";
+
+  if (error.message) return error;
+
   try {
     await db
       .delete(calendarEvents)
       .where(
         and(
-          eq(calendarEvents.id, calendarEventId),
-          eq(calendarEvents.userId, userId),
+          eq(calendarEvents.id, calendarEvent.id),
+          eq(calendarEvents.userId, calendarEvent.userId),
         ),
       );
-  } catch (error) {
-    const message = `Couldn't delete Event. User who tried to delete ${userId}. ${String(error)}`;
-    console.log(message);
-    return {
-      message,
-    };
+  } catch (e) {
+    error.message = `${String(e)}`;
+    return error;
   }
 }

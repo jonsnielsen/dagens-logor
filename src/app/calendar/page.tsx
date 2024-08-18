@@ -3,11 +3,9 @@ import { format, getISOWeek } from "date-fns";
 import Link from "next/link";
 import { CreateCalendarEventOverlay } from "~/app/calendar/_components/CreateCalendarEventOverlay";
 import { Card, CardContent } from "~/components/ui/card";
-import { Separator } from "~/components/ui/separator";
 import { isLoggedIn } from "~/lib/serverUtils";
 import { Category } from "~/lib/types";
-import { formatMinutesTwoDigits, getTimeFromDate } from "~/lib/utils";
-import { CreateCalendarEventDTO } from "~/server/db/dtoTypes";
+import { getTimeFromDate } from "~/lib/utils";
 import {
   GetCalendarEventsReturnType,
   getCalendarEvents,
@@ -25,6 +23,7 @@ function CalendarEvent({
 
   return (
     <Card
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
       className={`hover:bg-gray-50 ${category === Category.OTHER ? "bg-yellow-100 hover:bg-yellow-200" : ""}`}
     >
       <CardContent>

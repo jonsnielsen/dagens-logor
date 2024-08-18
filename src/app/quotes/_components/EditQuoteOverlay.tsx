@@ -26,14 +26,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { QuoteDBType } from "~/server/db/schema";
+import type { QuoteDBType } from "~/server/db/schema";
 import { updateQuote } from "~/server/queries/QuoteQueries";
-
-function SubmitButton() {
-  // const { pending } = useFormStatus();
-  // if (pending) return <div>yoyoyo</div>;
-  return <Button type="submit">Submit</Button>;
-}
+import { toast } from "sonner";
 
 const formSchema = z.object({
   quote: z.string().min(1, "Required").max(1024),
@@ -56,11 +51,13 @@ export function EditQuoteOverlay({ quote }: { quote: QuoteDBType }) {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await updateQuote(values, quote.id);
+    const res = await updateQuote({ ...quote, ...values });
     if (!res?.message) {
       // reruns on the server and refreshes just the necessary parts.
       router.refresh();
       setOpen(false);
+    } else {
+      toast.error(res.message);
     }
   }
 
@@ -74,10 +71,6 @@ export function EditQuoteOverlay({ quote }: { quote: QuoteDBType }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit quote</DialogTitle>
-          {/* <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription> */}
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -133,4 +126,10 @@ export function EditQuoteOverlay({ quote }: { quote: QuoteDBType }) {
       </DialogContent>
     </Dialog>
   );
+}
+
+function SubmitButton() {
+  // const { pending } = useFormStatus();
+  // if (pending) return <div>yoyoyo</div>;
+  return <Button type="submit">Submit</Button>;
 }

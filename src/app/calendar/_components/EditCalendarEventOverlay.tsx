@@ -54,6 +54,7 @@ import {
 } from "~/server/queries/CalendarQueries";
 import { Category, Visibility } from "~/lib/types";
 import { CalendarDBType } from "~/server/db/schema";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string().min(1, "Required").max(254),
@@ -83,7 +84,7 @@ export function EditCalendarEventOverlay({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: calendarEvent.title,
-      description: calendarEvent.description || "",
+      description: calendarEvent.description ?? "",
       date: dateObject,
       time: timeValue,
       visibility: calendarEvent.visibility as Visibility,
@@ -103,14 +104,18 @@ export function EditCalendarEventOverlay({
       ),
     ).toISOString();
 
-    const res = await updateCalendarEvent(
-      { ...rest, date: dateString },
-      calendarEvent.id,
-    );
+    const res = await updateCalendarEvent({
+      ...calendarEvent,
+      ...rest,
+      date: dateString,
+    });
+
     if (!res?.message) {
       // reruns on the server and refreshes just the necessary parts.
       router.refresh();
       setOpen(false);
+    } else {
+      toast.error(res.message);
     }
   }
 

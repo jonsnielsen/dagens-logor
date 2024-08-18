@@ -6,6 +6,7 @@ import { TopNav } from "~/app/_components/TopNav";
 import { ThemeProvider } from "~/components/ThemeProvider";
 import { BottomNav } from "~/app/_components/BottomNav";
 import { Viewport } from "next";
+import { Toaster } from "~/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -55,6 +56,7 @@ export default function RootLayout({
               </div>
               <BottomNav />
             </div>
+            <Toaster richColors />
           </ThemeProvider>
         </body>
       </html>

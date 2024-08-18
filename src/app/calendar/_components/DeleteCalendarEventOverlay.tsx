@@ -15,20 +15,25 @@ import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { deleteCalendarEvent } from "~/server/queries/CalendarQueries";
+import type { CalendarDBType } from "~/server/db/schema";
+import { toast } from "sonner";
 
 export function DeleteCalendarEventOverlay({
-  calendarEventId,
+  calendarEvent,
 }: {
-  calendarEventId: number;
+  calendarEvent: CalendarDBType;
 }) {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
 
   async function onDelete() {
-    const res = await deleteCalendarEvent(calendarEventId);
+    const res = await deleteCalendarEvent(calendarEvent);
     if (!res?.message) {
       router.push("/calendar");
+      router.refresh();
+    } else {
+      toast.error(res.message);
     }
   }
 

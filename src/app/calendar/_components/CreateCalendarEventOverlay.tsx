@@ -49,6 +49,7 @@ import {
 import { TimePicker } from "~/components/ui/time-picker/time-picker";
 import { createCalendarEvent } from "~/server/queries/CalendarQueries";
 import { Category, Visibility } from "~/lib/types";
+import { toast } from "sonner";
 
 function SubmitButton() {
   // const { pending } = useFormStatus();
@@ -99,6 +100,8 @@ export function CreateCalendarEventOverlay() {
       // reruns on the server and refreshes just the necessary parts.
       router.refresh();
       setOpen(false);
+    } else {
+      toast.error(res.message);
     }
   }
 

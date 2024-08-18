@@ -15,16 +15,21 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { deleteQuote } from "~/server/queries/QuoteQueries";
+import type { QuoteDBType } from "~/server/db/schema";
+import { toast } from "sonner";
 
-export function DeleteQuoteOverlay({ quoteId }: { quoteId: number }) {
+export function DeleteQuoteOverlay({ quote }: { quote: QuoteDBType }) {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
 
   async function onDelete() {
-    const res = await deleteQuote(quoteId);
+    const res = await deleteQuote(quote);
     if (!res?.message) {
       router.push("/quotes");
+      router.refresh();
+    } else {
+      toast.error(res.message);
     }
   }
 
