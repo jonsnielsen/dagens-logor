@@ -76,13 +76,11 @@ export function EditCalendarEventOverlay({
 
   const dateObject = new Date(calendarEvent.date);
 
-  const time = getTimeFromDateHourTwoDigits(dateObject);
-  console.log({ time });
-  console.log({
-    helsitime: dateObject.toLocaleString("en-US", {
-      timeZone: "Europe/Copenhagen",
-    }),
-  });
+  const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
+  // var userTimezoneOffset = date.getTimezoneOffset() * 60000;
+  const newDate = new Date(dateObject.getTime() + userTimezoneOffset);
+  const time = getTimeFromDateHourTwoDigits(newDate);
+  console.log({ hm: getTimeFromDateHourTwoDigits(newDate) });
 
   const timeValue =
     time && new Time(Number(time.slice(0, 2)), Number(time.slice(3)));
