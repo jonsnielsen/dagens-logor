@@ -37,7 +37,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { cn, formatMinutesTwoDigits, getTimeFromDate } from "~/lib/utils";
+import { cn, getTimeFromDateHourTwoDigits } from "~/lib/utils";
 import { Calendar } from "~/components/ui/calendar";
 import { Textarea } from "~/components/ui/textarea";
 import {
@@ -76,9 +76,10 @@ export function EditCalendarEventOverlay({
 
   const dateObject = new Date(calendarEvent.date);
 
-  const time = getTimeFromDate(dateObject);
+  const time = getTimeFromDateHourTwoDigits(dateObject);
+
   const timeValue =
-    time && new Time(Number(time?.slice(0, 2)), Number(time?.slice(3)));
+    time && new Time(Number(time.slice(0, 2)), Number(time.slice(3)));
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
