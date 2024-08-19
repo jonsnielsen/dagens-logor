@@ -12,6 +12,7 @@ export async function getQuotes() {
   if (!user.userId) throw new Error("Unauthorized, not logged in");
 
   const quotes = await db.query.quotes.findMany({
+    where: (model, { isNull }) => isNull(model.archived),
     orderBy: (model, { desc }) => desc(model.id),
   });
 

@@ -8,6 +8,7 @@ import {
   serial,
   timestamp,
   varchar,
+  boolean,
   date,
 } from "drizzle-orm/pg-core";
 
@@ -46,6 +47,7 @@ export const quotes = createTable("quote", {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: timestamp("updatedAt", { withTimezone: true }),
+  archived: boolean("archived"),
 });
 
 export type QuoteDBType = typeof quotes.$inferSelect;
