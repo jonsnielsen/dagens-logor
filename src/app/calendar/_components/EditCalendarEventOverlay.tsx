@@ -75,10 +75,12 @@ export function EditCalendarEventOverlay({
   const router = useRouter();
 
   const dateObject = new Date(calendarEvent.date);
+  console.log({ calendarEventDateBrows: calendarEvent.date });
+  console.log({ timezoneoffset: dateObject.getTimezoneOffset() });
 
   const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
   // var userTimezoneOffset = date.getTimezoneOffset() * 60000;
-  const newDate = new Date(dateObject.getTime() + userTimezoneOffset);
+  const newDate = new Date(dateObject.getTime() + -1 * userTimezoneOffset);
   const time = getTimeFromDateHourTwoDigits(newDate);
   console.log({ hm: getTimeFromDateHourTwoDigits(newDate) });
 

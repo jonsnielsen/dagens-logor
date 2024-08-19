@@ -50,6 +50,8 @@ export default async function QuoteIndividualPage({
   const newDate = new Date(dateObject.getTime() + userTimezoneOffset);
   const time = getTimeFromDate(newDate);
 
+  console.log({ calendarEventDate: calendarEvent.date });
+
   return (
     <main className="page-side-margin-1">
       {hasCRUDRights && (

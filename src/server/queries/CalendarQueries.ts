@@ -16,6 +16,7 @@ export async function getCalendarEvent(calendarEventId: number) {
     where: (model, { eq }) => eq(model.id, calendarEventId),
   });
 
+  console.log(calendarEvent?.date);
   if (
     calendarEvent?.visibility === Visibility.PRIVATE &&
     calendarEvent.userId !== user.userId
