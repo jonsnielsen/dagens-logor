@@ -44,13 +44,7 @@ export default async function QuoteIndividualPage({
     loggedInUser?.id && (calendarEvent.userId === loggedInUser?.id || isAdmin);
 
   const formattedDate = format(calendarEvent.date, "EEEE MMMM d, yyyy");
-
-  const dateObject = new Date(calendarEvent.date);
-  const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
-  const newDate = new Date(dateObject.getTime() + -1 * userTimezoneOffset);
-  const time = getTimeFromDate(newDate);
-
-  console.log({ calendarEventDate: calendarEvent.date });
+  const time = getTimeFromDate(new Date(calendarEvent.date));
 
   return (
     <main className="page-side-margin-1">
