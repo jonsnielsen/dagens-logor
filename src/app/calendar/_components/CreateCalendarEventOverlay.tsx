@@ -36,7 +36,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { cn } from "~/lib/utils";
+import { cn, getTimeFromDateHourTwoDigits } from "~/lib/utils";
 import { Calendar } from "~/components/ui/calendar";
 import { Textarea } from "~/components/ui/textarea";
 import {
@@ -84,6 +84,9 @@ export function CreateCalendarEventOverlay() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { date, time, ...rest } = values;
+    // console.log({ time });
+    // console.log({ hour: time?.hour });
+    // console.log({ minute: time?.minute });
     const dateString = new Date(
       Date.UTC(
         date.getFullYear(),
@@ -92,9 +95,19 @@ export function CreateCalendarEventOverlay() {
         time?.hour ?? 23,
         time?.minute ?? 59,
       ),
-    ).toISOString();
+    );
 
-    const res = await createCalendarEvent({ ...rest, date: dateString });
+    // const time = getTimeFromDateHourTwoDigits(dateObject);
+    const userTimezoneOffset = dateString.getTimezoneOffset() * 60000;
+    console.log({ userTimezoneOffset });
+    // var userTimezoneOffset = date.getTimezoneOffset() * 60000;
+    const newDate = new Date(dateString.getTime() + -1 * userTimezoneOffset);
+    console.log({ hm: getTimeFromDateHourTwoDigits(newDate) });
+    const newDateString = newDate.toISOString();
+    console.log({ newDateString });
+    // console.log({ dateString });
+
+    const res = await createCalendarEvent({ ...rest, date: newDateString });
     if (!res?.message) {
       // reruns on the server and refreshes just the necessary parts.
       router.refresh();
