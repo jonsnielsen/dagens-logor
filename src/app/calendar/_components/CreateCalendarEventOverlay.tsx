@@ -84,9 +84,7 @@ export function CreateCalendarEventOverlay() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { date, time, ...rest } = values;
-    // console.log({ time });
-    // console.log({ hour: time?.hour });
-    // console.log({ minute: time?.minute });
+
     const dateString = new Date(
       Date.UTC(
         date.getFullYear(),
@@ -97,15 +95,9 @@ export function CreateCalendarEventOverlay() {
       ),
     );
 
-    // const time = getTimeFromDateHourTwoDigits(dateObject);
     const userTimezoneOffset = dateString.getTimezoneOffset() * 60000;
-    console.log({ userTimezoneOffset });
-    // var userTimezoneOffset = date.getTimezoneOffset() * 60000;
     const newDate = new Date(dateString.getTime() + -1 * userTimezoneOffset);
-    console.log({ hm: getTimeFromDateHourTwoDigits(newDate) });
     const newDateString = newDate.toISOString();
-    console.log({ newDateString });
-    // console.log({ dateString });
 
     const res = await createCalendarEvent({ ...rest, date: newDateString });
     if (!res?.message) {

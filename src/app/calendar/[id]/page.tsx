@@ -47,7 +47,7 @@ export default async function QuoteIndividualPage({
 
   const dateObject = new Date(calendarEvent.date);
   const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
-  const newDate = new Date(dateObject.getTime() + userTimezoneOffset);
+  const newDate = new Date(dateObject.getTime() + -1 * userTimezoneOffset);
   const time = getTimeFromDate(newDate);
 
   console.log({ calendarEventDate: calendarEvent.date });
