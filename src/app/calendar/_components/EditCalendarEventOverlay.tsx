@@ -78,6 +78,11 @@ export function EditCalendarEventOverlay({
 
   const time = getTimeFromDateHourTwoDigits(dateObject);
   console.log({ time });
+  console.log({
+    helsitime: dateObject.toLocaleString("en-US", {
+      timeZone: "Europe/Copenhagen",
+    }),
+  });
 
   const timeValue =
     time && new Time(Number(time.slice(0, 2)), Number(time.slice(3)));
