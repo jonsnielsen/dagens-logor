@@ -46,9 +46,11 @@ export default async function QuoteIndividualPage({
   const formattedDate = format(calendarEvent.date, "EEEE MMMM d, yyyy");
 
   const dateObject = new Date(calendarEvent.date);
-  const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
+  const timeZoneOffset = dateObject.getTimezoneOffset() - 120;
+  const userTimezoneOffset = timeZoneOffset * 60000;
   const newDate = new Date(dateObject.getTime() + userTimezoneOffset);
   const time = getTimeFromDate(newDate);
+  console.log({ yoyo: dateObject.getTimezoneOffset() });
 
   console.log({ calendarEventDate: calendarEvent.date });
 
