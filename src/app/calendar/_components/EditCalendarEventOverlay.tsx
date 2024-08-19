@@ -77,6 +77,7 @@ export function EditCalendarEventOverlay({
   const dateObject = new Date(calendarEvent.date);
 
   const time = getTimeFromDateHourTwoDigits(dateObject);
+  console.log({ time });
 
   const timeValue =
     time && new Time(Number(time.slice(0, 2)), Number(time.slice(3)));

@@ -85,6 +85,8 @@ export function CreateCalendarEventOverlay() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { date, time, ...rest } = values;
     console.log({ time });
+    console.log({ hour: time?.hour });
+    console.log({ minute: time?.minute });
     const dateString = new Date(
       Date.UTC(
         date.getFullYear(),
@@ -94,15 +96,16 @@ export function CreateCalendarEventOverlay() {
         time?.minute ?? 59,
       ),
     ).toISOString();
+    console.log({ dateString });
 
-    const res = await createCalendarEvent({ ...rest, date: dateString });
-    if (!res?.message) {
-      // reruns on the server and refreshes just the necessary parts.
-      router.refresh();
-      setOpen(false);
-    } else {
-      toast.error(res.message);
-    }
+    // const res = await createCalendarEvent({ ...rest, date: dateString });
+    // if (!res?.message) {
+    //   // reruns on the server and refreshes just the necessary parts.
+    //   router.refresh();
+    //   setOpen(false);
+    // } else {
+    //   toast.error(res.message);
+    // }
   }
 
   return (
