@@ -15,7 +15,7 @@ import {
 import { Visibility } from "~/lib/types";
 import { DeleteCalendarEventOverlay } from "~/app/calendar/_components/DeleteCalendarEventOverlay";
 import { EditCalendarEventOverlay } from "~/app/calendar/_components/EditCalendarEventOverlay";
-import { getTimeFromDate } from "~/lib/utils";
+import { getTimeFromDate, getTimezoneOffsetTime } from "~/lib/utils";
 
 const sectionClasses = "my-8";
 const headingClasses = "text-sm font-bold mb-2";
@@ -45,14 +45,7 @@ export default async function QuoteIndividualPage({
 
   const formattedDate = format(calendarEvent.date, "EEEE MMMM d, yyyy");
 
-  const dateObject = new Date(calendarEvent.date);
-  const timeZoneOffset = dateObject.getTimezoneOffset() - 120;
-  const userTimezoneOffset = timeZoneOffset * 60000;
-  const newDate = new Date(dateObject.getTime() + userTimezoneOffset);
-  const time = getTimeFromDate(newDate);
-  console.log({ yoyo: dateObject.getTimezoneOffset() });
-
-  console.log({ calendarEventDate: calendarEvent.date });
+  const time = getTimezoneOffsetTime(new Date(calendarEvent.date));
 
   return (
     <main className="page-side-margin-1">

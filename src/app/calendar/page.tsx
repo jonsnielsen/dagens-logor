@@ -5,7 +5,7 @@ import { CreateCalendarEventOverlay } from "~/app/calendar/_components/CreateCal
 import { Card, CardContent } from "~/components/ui/card";
 import { isLoggedIn } from "~/lib/serverUtils";
 import { Category } from "~/lib/types";
-import { getTimeFromDate } from "~/lib/utils";
+import { getTimeFromDate, getTimezoneOffsetTime } from "~/lib/utils";
 import {
   GetCalendarEventsReturnType,
   getCalendarEvents,
@@ -18,7 +18,8 @@ function CalendarEvent({
   visibility,
   description,
 }: GetCalendarEventsReturnType) {
-  const time = getTimeFromDate(new Date(date));
+  const time = getTimezoneOffsetTime(new Date(date));
+  //  getTimeFromDate(new Date(date));
   const formattedDate = format(date, "E MMM d");
 
   return (

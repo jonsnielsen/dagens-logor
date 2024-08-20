@@ -27,3 +27,11 @@ export function getTimeFromDateHourTwoDigits(date: Date) {
   time = time === "23:59" ? null : time; // 23:59 is when no time was set, in that case don't show the time.
   return time;
 }
+
+export function getTimezoneOffsetTime(date: Date) {
+  const timeZoneOffset = date.getTimezoneOffset() - 120;
+  const userTimezoneOffset = timeZoneOffset * 60000;
+  const newDate = new Date(date.getTime() + userTimezoneOffset);
+  const time = getTimeFromDate(newDate);
+  return time;
+}
