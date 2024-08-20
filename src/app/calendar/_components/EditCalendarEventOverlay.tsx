@@ -114,7 +114,7 @@ export function EditCalendarEventOverlay({
 
     const timeZoneOffset = dateString.getTimezoneOffset();
     const userTimezoneOffset = timeZoneOffset * 60000;
-    const newDate = new Date(dateString.getTime() + userTimezoneOffset);
+    const newDate = new Date(dateString.getTime() + -1 * userTimezoneOffset);
 
     const timezoneOffsetDate = newDate.toISOString();
     // const timezoneOffsetDate = getTimezoneOffsetDate(dateString).toISOString();
