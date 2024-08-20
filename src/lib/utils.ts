@@ -28,7 +28,7 @@ export function getTimeFromDateHourTwoDigits(date: Date) {
   return time;
 }
 
-function getTimezoneOffsetDate(date: Date) {
+export function getTimezoneOffsetDate(date: Date) {
   const timeZoneOffset = date.getTimezoneOffset() - 120;
   const userTimezoneOffset = timeZoneOffset * 60000;
   const newDate = new Date(date.getTime() + userTimezoneOffset);

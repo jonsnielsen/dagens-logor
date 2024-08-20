@@ -40,6 +40,7 @@ import {
 import {
   cn,
   getTimeFromDateHourTwoDigits,
+  getTimezoneOffsetDate,
   getTimezoneOffsetTime,
   getTimezoneOffsetTimeTwoDigits,
 } from "~/lib/utils";
@@ -81,11 +82,7 @@ export function EditCalendarEventOverlay({
 
   const dateObject = new Date(calendarEvent.date);
 
-  // const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
-  // var userTimezoneOffset = date.getTimezoneOffset() * 60000;
-  // const newDate = new Date(dateObject.getTime() + -1 * userTimezoneOffset);
   const time = getTimezoneOffsetTimeTwoDigits(dateObject);
-  // const time = getTimeFromDateHourTwoDigits(newDate);
 
   const timeValue =
     time && new Time(Number(time.slice(0, 2)), Number(time.slice(3)));
@@ -104,6 +101,7 @@ export function EditCalendarEventOverlay({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { date, time, ...rest } = values;
+    console.log({ time });
     const dateString = new Date(
       Date.UTC(
         date.getFullYear(),
@@ -112,12 +110,13 @@ export function EditCalendarEventOverlay({
         time?.hour ?? 23,
         time?.minute ?? 59,
       ),
-    ).toISOString();
+    );
+    const timezoneOffsetDate = getTimezoneOffsetDate(dateString).toISOString();
 
     const res = await updateCalendarEvent({
       ...calendarEvent,
       ...rest,
-      date: dateString,
+      date: timezoneOffsetDate,
     });
 
     if (!res?.message) {
