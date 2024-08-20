@@ -37,7 +37,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
-import { cn, getTimeFromDateHourTwoDigits } from "~/lib/utils";
+import {
+  cn,
+  getTimeFromDateHourTwoDigits,
+  getTimezoneOffsetTime,
+  getTimezoneOffsetTimeTwoDigits,
+} from "~/lib/utils";
 import { Calendar } from "~/components/ui/calendar";
 import { Textarea } from "~/components/ui/textarea";
 import {
@@ -76,10 +81,11 @@ export function EditCalendarEventOverlay({
 
   const dateObject = new Date(calendarEvent.date);
 
-  const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
+  // const userTimezoneOffset = dateObject.getTimezoneOffset() * 60000;
   // var userTimezoneOffset = date.getTimezoneOffset() * 60000;
-  const newDate = new Date(dateObject.getTime() + -1 * userTimezoneOffset);
-  const time = getTimeFromDateHourTwoDigits(newDate);
+  // const newDate = new Date(dateObject.getTime() + -1 * userTimezoneOffset);
+  const time = getTimezoneOffsetTimeTwoDigits(dateObject);
+  // const time = getTimeFromDateHourTwoDigits(newDate);
 
   const timeValue =
     time && new Time(Number(time.slice(0, 2)), Number(time.slice(3)));

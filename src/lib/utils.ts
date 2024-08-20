@@ -28,10 +28,21 @@ export function getTimeFromDateHourTwoDigits(date: Date) {
   return time;
 }
 
-export function getTimezoneOffsetTime(date: Date) {
+function getTimezoneOffsetDate(date: Date) {
   const timeZoneOffset = date.getTimezoneOffset() - 120;
   const userTimezoneOffset = timeZoneOffset * 60000;
   const newDate = new Date(date.getTime() + userTimezoneOffset);
-  const time = getTimeFromDate(newDate);
+  return newDate;
+}
+
+export function getTimezoneOffsetTime(date: Date) {
+  const timezoneOffsetDate = getTimezoneOffsetDate(date);
+  const time = getTimeFromDate(timezoneOffsetDate);
+  return time;
+}
+
+export function getTimezoneOffsetTimeTwoDigits(date: Date) {
+  const timezoneOffsetDate = getTimezoneOffsetDate(date);
+  const time = getTimeFromDateHourTwoDigits(timezoneOffsetDate);
   return time;
 }
