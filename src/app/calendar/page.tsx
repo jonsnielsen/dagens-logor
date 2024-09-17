@@ -19,7 +19,6 @@ function CalendarEvent({
   description,
 }: GetCalendarEventsReturnType) {
   const time = getTimezoneOffsetTime(new Date(date));
-  //  getTimeFromDate(new Date(date));
   const formattedDate = format(date, "E MMM d");
 
   return (
