@@ -1,12 +1,13 @@
 "use server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, gt } from "drizzle-orm";
 import { CreateCalendarEventDTO } from "~/server/db/dtoTypes";
 import { CalendarDBType, calendarEvents } from "~/server/db/schema";
 import { union } from "drizzle-orm/pg-core";
 import { ServerErrorType, Visibility } from "~/lib/types";
 import { hasAdminRights } from "~/lib/serverUtils";
+import { subDays } from "date-fns";
 
 export async function getCalendarEvent(calendarEventId: number) {
   const user = auth();
@@ -16,7 +17,6 @@ export async function getCalendarEvent(calendarEventId: number) {
     where: (model, { eq }) => eq(model.id, calendarEventId),
   });
 
-  console.log(calendarEvent?.date);
   if (
     calendarEvent?.visibility === Visibility.PRIVATE &&
     calendarEvent.userId !== user.userId
@@ -28,12 +28,24 @@ export async function getCalendarEvent(calendarEventId: number) {
   return calendarEvent;
 }
 
+function getPreviousSunday(date: Date) {
+  if (date.getDay() === 7) {
+    return date;
+  }
+  return subDays(date, 1);
+}
+
 export async function getCalendarEvents() {
   // get all public events.
   // get all private events for that user. make index for the user so this doesn't have to go through every data entry?
 
   const user = auth();
   if (!user.userId) throw new Error("Unauthorized, not logged in");
+
+  // find date of monday in the current week
+  const currentDate = new Date();
+  const previousSunday = getPreviousSunday(currentDate);
+  const previousSundayISO = previousSunday.toISOString();
 
   const foundCalendarEvents = await union(
     db
@@ -46,7 +58,12 @@ export async function getCalendarEvents() {
         visibility: calendarEvents.visibility,
       })
       .from(calendarEvents)
-      .where(eq(calendarEvents.visibility, Visibility.PUBLIC)),
+      .where(
+        and(
+          gt(calendarEvents.date, previousSundayISO),
+          eq(calendarEvents.visibility, Visibility.PUBLIC),
+        ),
+      ),
     db
       .select({
         id: calendarEvents.id,
@@ -59,8 +76,11 @@ export async function getCalendarEvents() {
       .from(calendarEvents)
       .where(
         and(
-          eq(calendarEvents.userId, user.userId),
-          eq(calendarEvents.visibility, Visibility.PRIVATE),
+          gt(calendarEvents.date, previousSundayISO),
+          and(
+            eq(calendarEvents.userId, user.userId),
+            eq(calendarEvents.visibility, Visibility.PRIVATE),
+          ),
         ),
       ),
   ).orderBy(calendarEvents.date);
